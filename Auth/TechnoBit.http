@@ -1,0 +1,6 @@
+@TechnoBit_HostAddress = http://localhost:5240
+
+GET {{TechnoBit_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
