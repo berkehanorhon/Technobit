@@ -5,7 +5,7 @@ namespace TechnoBit.Models;
 public class LoginModel
     {
         [Required(ErrorMessage = "Username is required")]
-        [StringLength(100, MinimumLength = 6, ErrorMessage = "Username must be at least {2} characters long.")]
+        [StringLength(16, MinimumLength = 6, ErrorMessage = "Username must be at least {2} characters long and at max {1} characters long.")]
         [RegularExpression(@"^[a-z0-9]+$", ErrorMessage = "Username can only contain lowercase letters and numbers")]
         public string Username { get; set; }
         

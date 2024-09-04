@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using TechnoBit.Interfaces;
 using TechnoBit.Models;
 
@@ -10,11 +11,13 @@ namespace TechnoBit.Controllers
     {
         private readonly IAuthService _authService;
         private readonly ITokenService _tokenService;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(IAuthService authService, ITokenService tokenService)
+        public AuthController(IAuthService authService, ITokenService tokenService, IConfiguration configuration)
         {
             _authService = authService;
             _tokenService = tokenService;
+            _configuration = configuration;
         }
 
         [HttpPost("login")]
@@ -36,7 +39,7 @@ namespace TechnoBit.Controllers
             catch (Exception ex)
             {
                 // Genel hata yönetimi
-                return StatusCode(500, "Bir hata oluştu.");
+                return StatusCode(500, _configuration["ErrorMessages::UnknownError"]);
             }
         }
 
@@ -70,9 +73,17 @@ namespace TechnoBit.Controllers
             {
                 return Unauthorized(ex.Message);
             }
+            catch (SecurityTokenMalformedException ex)
+            {
+                return BadRequest(_configuration["ErrorMessages::InvalidTokenError"]);
+            }
+            catch (SecurityTokenException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
-                return StatusCode(500, "Bir hata oluştu.");
+                return StatusCode(500,_configuration["ErrorMessages::UnknownError"]);
             }
         }
 
