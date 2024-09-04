@@ -2,8 +2,10 @@
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using TechnoBit.Interfaces;
+
 namespace TechnoBit.Services;
-public class TokenService
+public class TokenService : ITokenService
 {
     private readonly IConfiguration _configuration;
 
@@ -51,7 +53,7 @@ public class TokenService
 
         if (securityToken is not JwtSecurityToken jwtSecurityToken ||
             !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-            throw new SecurityTokenException("Invalid token");
+            throw new SecurityTokenException("Geçersiz token.");
 
         return principal;
     }

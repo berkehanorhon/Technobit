@@ -1,125 +1,94 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using TechnoBit.Data;
-using TechnoBit.Services;
+using TechnoBit.Interfaces;
 using TechnoBit.Models;
-namespace TechnoBit.Controllers;
 
-[Route("api/[controller]")]
-[ApiController]
-public class AuthController : ControllerBase
+namespace TechnoBit.Controllers
 {
-    private readonly ApplicationDbContext _context;
-    private readonly TokenService _tokenService;
-    private readonly IConfiguration _configuration;
-
-    public AuthController(ApplicationDbContext context, TokenService tokenService, IConfiguration configuration)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AuthController : ControllerBase
     {
-        _context = context;
-        _tokenService = tokenService;
-        _configuration = configuration;
-    }
+        private readonly IAuthService _authService;
+        private readonly ITokenService _tokenService;
+        private readonly IConfiguration _configuration;
 
-    [HttpPost("login")]
-    public IActionResult Login([FromBody] LoginModel model)
-    {
-        var user = _context.Users.SingleOrDefault(u => u.Username == model.Username);
-        
-        if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
+        public AuthController(IAuthService authService, ITokenService tokenService, IConfiguration configuration)
         {
-            return Unauthorized("Geçersiz kullanıcı adı veya şifre.");
-        }
-        
-        if (user == null)
-            return Unauthorized();
-
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, user.Username),
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
-        };
-
-        var accessToken = _tokenService.GenerateAccessToken(claims);
-        var refreshToken = _tokenService.GenerateRefreshToken();
-
-        user.RefreshToken = refreshToken;
-        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(Convert.ToDouble(_configuration["JwtSettings:RefreshTokenExpirationDays"]));
-
-        _context.SaveChanges();
-
-        return Ok(new
-        {
-            AccessToken = accessToken,
-            RefreshToken = refreshToken
-        });
-    }
-    
-    [HttpPost("register")]
-    public IActionResult Register(RegisterModel model)
-    {
-        // Kullanıcı adı veya e-posta zaten var mı kontrol et
-        if (_context.Users.Any(u => u.Username == model.Username || u.Email == model.Email))
-        {
-            return BadRequest("Kullanıcı adı veya e-posta zaten mevcut.");
+            _authService = authService;
+            _tokenService = tokenService;
+            _configuration = configuration;
         }
 
-        // Şifreyi hashle
-        string passwordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
-
-        // Yeni kullanıcı oluştur
-        var user = new User
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] LoginModel model)
         {
-            Username = model.Username,
-            PasswordHash = passwordHash,
-            Email = model.Email
-        };
+            try
+            {
+                return Ok(_authService.Login(model));
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // Genel hata yönetimi
+                return StatusCode(500, _configuration["ErrorMessages::UnknownError"]);
+            }
+        }
 
-        // Kullanıcıyı veritabanına ekle
-        _context.Users.Add(user);
-        _context.SaveChanges();
-
-        return Ok("Kayıt başarılı.");
-    }
-
-    [HttpPost("refresh")]
-    public IActionResult Refresh([FromBody] TokenModel model)
-    {
-        var principal = _tokenService.GetPrincipalFromExpiredToken(model.AccessToken);
-        var username = principal.Identity.Name;
-
-        var user = _context.Users.SingleOrDefault(u => u.Username == username);
-
-        if (user == null || user.RefreshToken != model.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
-            return Unauthorized();
-
-        var newAccessToken = _tokenService.GenerateAccessToken(principal.Claims);
-        var newRefreshToken = _tokenService.GenerateRefreshToken();
-
-        user.RefreshToken = newRefreshToken;
-        _context.SaveChanges();
-
-        return Ok(new
+        [HttpPost("register")]
+        public IActionResult Register(RegisterModel model)
         {
-            AccessToken = newAccessToken,
-            RefreshToken = newRefreshToken
-        });
+            try
+            {
+                _authService.Register(model);
+                return Ok("Kayıt başarılı.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("refresh")]
+        public IActionResult Refresh([FromBody] TokenModel model)
+        {
+            try
+            {
+                return Ok(_authService.RefreshToken(model));
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (SecurityTokenMalformedException ex)
+            {
+                return BadRequest(_configuration["ErrorMessages::InvalidTokenError"]);
+            }
+            catch (SecurityTokenException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500,_configuration["ErrorMessages::UnknownError"]);
+            }
+        }
+
+        [HttpPost("revoke")]
+        public IActionResult Revoke([FromBody] RevokeTokenModel model)
+        {
+            try
+            {
+                _authService.RevokeToken(model);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
-    
-    [HttpPost("revoke")]
-    public IActionResult Revoke([FromBody] RevokeTokenModel model)
-    {
-        var user = _context.Users.SingleOrDefault(u => u.RefreshToken == model.RefreshToken);
-
-        if (user == null)
-            return BadRequest("Invalid token");
-
-        user.RefreshToken = null;
-        _context.SaveChanges();
-
-        return NoContent();
-    }
-
 }
