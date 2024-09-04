@@ -10,20 +10,20 @@ using TechnoBit.Models;
 
 public class AuthService : IAuthService
 {
-    private readonly ApplicationDbContext _context;
     private readonly ITokenService _tokenService;
+    private readonly IUserRepository _userRepository;
     private readonly IConfiguration _configuration;
 
-    public AuthService(ApplicationDbContext context, ITokenService tokenService, IConfiguration configuration)
+    public AuthService(ApplicationDbContext context, ITokenService tokenService, IUserRepository userRepository, IConfiguration configuration)
     {
-        _context = context;
         _tokenService = tokenService;
         _configuration = configuration;
+        _userRepository = userRepository;
     }
 
-    public TokenModel Login(LoginModel model)
+    public async Task<TokenModel> Login(LoginModel model)
     {
-        var user = _context.Users.SingleOrDefault(u => u.Username == model.Username);
+        var user = await _userRepository.GetUserByUsernameAsync(model.Username);
 
         if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
         {
@@ -36,45 +36,44 @@ public class AuthService : IAuthService
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
         };
         
-        TokenModel returnModel = new TokenModel();
+        var returnModel = new TokenModel();
         
         returnModel.AccessToken = _tokenService.GenerateAccessToken(claims);
         returnModel.RefreshToken = _tokenService.GenerateRefreshToken();
         
         user.RefreshToken = returnModel.RefreshToken;
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(Convert.ToDouble(_configuration["JwtSettings:RefreshTokenExpirationDays"]));
-
-        _context.SaveChanges();
+        await _userRepository.UpdateUserAsync(user);
 
         return returnModel;
     }
 
-    public void Register(RegisterModel model)
+    public async Task Register(RegisterModel model)
     {
-        if (_context.Users.Any(u => u.Username == model.Username || u.Email == model.Email))
+        if (await _userRepository.GetUserByUsernameAsync(model.Username) != null || await _userRepository.GetUserByEmailAsync(model.Email) != null)
         {
             throw new Exception("Kullanıcı adı veya e-posta zaten mevcut.");
         }
 
         string passwordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
-
-        var user = new User
+        
+        // TODO fonksiyonda bir hata kontrolü vs boolean dönmesi lazım mı?
+        
+        await _userRepository.AddUserAsync(new User
         {
             Username = model.Username,
             PasswordHash = passwordHash,
             Email = model.Email
-        };
-
-        _context.Users.Add(user);
-        _context.SaveChanges();
+        });
+        
     }
 
-    public TokenModel RefreshToken(TokenModel model)
+    public async Task<TokenModel> RefreshToken(TokenModel model)
     {
         var principal = _tokenService.GetPrincipalFromExpiredToken(model.AccessToken);
         var username = principal.Identity.Name;
 
-        var user = _context.Users.SingleOrDefault(u => u.Username == username);
+        var user = await _userRepository.GetUserByUsernameAsync(username);
 
         if (user == null || user.RefreshToken != model.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
             throw new UnauthorizedAccessException("Geçersiz veya süresi dolmuş refresh token.");
@@ -83,21 +82,23 @@ public class AuthService : IAuthService
         
         returnModel.AccessToken = _tokenService.GenerateAccessToken(principal.Claims);
         returnModel.RefreshToken = _tokenService.GenerateRefreshToken();
-
+        
         user.RefreshToken = returnModel.RefreshToken;
-        _context.SaveChanges();
+        await _userRepository.UpdateUserAsync(user);
 
         return returnModel;
     }
 
-    public void RevokeToken(RevokeTokenModel model)
+    public async Task RevokeToken(RevokeTokenModel model)
     {
-        var user = _context.Users.SingleOrDefault(u => u.RefreshToken == model.RefreshToken);
+        // TODO çok kötü bir yaklaşlım bunu değiştirelim
+
+        var user = await _userRepository.GetUserByTokenAsync(model.RefreshToken);
 
         if (user == null)
             throw new Exception("Geçersiz token.");
 
         user.RefreshToken = null;
-        _context.SaveChanges();
+        await _userRepository.UpdateUserAsync(user);
     }
 }

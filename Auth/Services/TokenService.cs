@@ -5,6 +5,9 @@ using Microsoft.IdentityModel.Tokens;
 using TechnoBit.Interfaces;
 
 namespace TechnoBit.Services;
+
+// TODO async'a gerek var mı?
+
 public class TokenService : ITokenService
 {
     private readonly IConfiguration _configuration;
