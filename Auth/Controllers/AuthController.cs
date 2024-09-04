@@ -25,12 +25,7 @@ namespace TechnoBit.Controllers
         {
             try
             {
-                var tokens = _authService.Login(model);
-                return Ok(new
-                {
-                    AccessToken = tokens.AccessToken,
-                    RefreshToken = tokens.RefreshToken
-                });
+                return Ok(_authService.Login(model));
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -62,12 +57,7 @@ namespace TechnoBit.Controllers
         {
             try
             {
-                var tokens = _authService.RefreshToken(model);
-                return Ok(new
-                {
-                    AccessToken = tokens.AccessToken,
-                    RefreshToken = tokens.RefreshToken
-                });
+                return Ok(_authService.RefreshToken(model));
             }
             catch (UnauthorizedAccessException ex)
             {

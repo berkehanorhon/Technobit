@@ -21,7 +21,7 @@ public class AuthService : IAuthService
         _configuration = configuration;
     }
 
-    public (string AccessToken, string RefreshToken) Login(LoginModel model)
+    public TokenModel Login(LoginModel model)
     {
         var user = _context.Users.SingleOrDefault(u => u.Username == model.Username);
 
@@ -35,16 +35,18 @@ public class AuthService : IAuthService
             new Claim(ClaimTypes.Name, user.Username),
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
         };
-
-        var accessToken = _tokenService.GenerateAccessToken(claims);
-        var refreshToken = _tokenService.GenerateRefreshToken();
-
-        user.RefreshToken = refreshToken;
+        
+        TokenModel returnModel = new TokenModel();
+        
+        returnModel.AccessToken = _tokenService.GenerateAccessToken(claims);
+        returnModel.RefreshToken = _tokenService.GenerateRefreshToken();
+        
+        user.RefreshToken = returnModel.RefreshToken;
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(Convert.ToDouble(_configuration["JwtSettings:RefreshTokenExpirationDays"]));
 
         _context.SaveChanges();
 
-        return (AccessToken: accessToken, RefreshToken: refreshToken);
+        return returnModel;
     }
 
     public void Register(RegisterModel model)
@@ -67,7 +69,7 @@ public class AuthService : IAuthService
         _context.SaveChanges();
     }
 
-    public (string AccessToken, string RefreshToken) RefreshToken(TokenModel model)
+    public TokenModel RefreshToken(TokenModel model)
     {
         var principal = _tokenService.GetPrincipalFromExpiredToken(model.AccessToken);
         var username = principal.Identity.Name;
@@ -76,14 +78,16 @@ public class AuthService : IAuthService
 
         if (user == null || user.RefreshToken != model.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
             throw new UnauthorizedAccessException("Geçersiz veya süresi dolmuş refresh token.");
+        
+        TokenModel returnModel = new TokenModel();
+        
+        returnModel.AccessToken = _tokenService.GenerateAccessToken(principal.Claims);
+        returnModel.RefreshToken = _tokenService.GenerateRefreshToken();
 
-        var newAccessToken = _tokenService.GenerateAccessToken(principal.Claims);
-        var newRefreshToken = _tokenService.GenerateRefreshToken();
-
-        user.RefreshToken = newRefreshToken;
+        user.RefreshToken = returnModel.RefreshToken;
         _context.SaveChanges();
 
-        return (AccessToken: newAccessToken, RefreshToken: newRefreshToken);
+        return returnModel;
     }
 
     public void RevokeToken(RevokeTokenModel model)
