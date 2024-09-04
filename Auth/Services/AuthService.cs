@@ -14,7 +14,7 @@ public class AuthService : IAuthService
     private readonly IUserRepository _userRepository;
     private readonly IConfiguration _configuration;
 
-    public AuthService(ApplicationDbContext context, ITokenService tokenService, IUserRepository userRepository, IConfiguration configuration)
+    public AuthService(ITokenService tokenService, IUserRepository userRepository, IConfiguration configuration)
     {
         _tokenService = tokenService;
         _configuration = configuration;
