@@ -5,6 +5,7 @@ using System.Security.Claims;
 using Microsoft.Extensions.Configuration;
 using BCrypt.Net;
 using TechnoBit.Data;
+using TechnoBit.DTOs;
 using TechnoBit.Interfaces;
 using TechnoBit.Models;
 
@@ -21,11 +22,11 @@ public class AuthService : IAuthService
         _userRepository = userRepository;
     }
 
-    public async Task<TokenModel> Login(LoginModel model)
+    public async Task<TokenDTO> Login(LoginDTO dto)
     {
-        var user = await _userRepository.GetUserByUsernameAsync(model.Username);
+        var user = await _userRepository.GetUserByUsernameAsync(dto.Username);
 
-        if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
+        if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
         {
             throw new UnauthorizedAccessException("Geçersiz kullanıcı adı veya şifre.");
         }
@@ -36,69 +37,69 @@ public class AuthService : IAuthService
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
         };
         
-        var returnModel = new TokenModel();
+        var returnModel = new TokenDTO();
         
         returnModel.AccessToken = _tokenService.GenerateAccessToken(claims);
         returnModel.RefreshToken = _tokenService.GenerateRefreshToken();
         
         user.RefreshToken = returnModel.RefreshToken;
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(Convert.ToDouble(_configuration["JwtSettings:RefreshTokenExpirationDays"]));
-        await _userRepository.UpdateUserAsync(user);
+        await _userRepository.UpdateModelAsync(user);
 
         return returnModel;
     }
 
-    public async Task Register(RegisterModel model)
+    public async Task Register(RegisterDTO dto)
     {
-        if (await _userRepository.GetUserByUsernameAsync(model.Username) != null || await _userRepository.GetUserByEmailAsync(model.Email) != null)
+        if (await _userRepository.GetUserByUsernameAsync(dto.Username) != null || await _userRepository.GetUserByEmailAsync(dto.Email) != null)
         {
             throw new Exception("Kullanıcı adı veya e-posta zaten mevcut.");
         }
 
-        string passwordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
+        string passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
         
         // TODO fonksiyonda bir hata kontrolü vs boolean dönmesi lazım mı?
         
-        await _userRepository.AddUserAsync(new User
+        await _userRepository.AddModelAsync(new User
         {
-            Username = model.Username,
+            Username = dto.Username,
             PasswordHash = passwordHash,
-            Email = model.Email
+            Email = dto.Email
         });
         
     }
 
-    public async Task<TokenModel> RefreshToken(TokenModel model)
+    public async Task<TokenDTO> RefreshToken(TokenDTO dto)
     {
-        var principal = _tokenService.GetPrincipalFromExpiredToken(model.AccessToken);
+        var principal = _tokenService.GetPrincipalFromExpiredToken(dto.AccessToken);
         var username = principal.Identity.Name;
 
         var user = await _userRepository.GetUserByUsernameAsync(username);
 
-        if (user == null || user.RefreshToken != model.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+        if (user == null || user.RefreshToken != dto.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
             throw new UnauthorizedAccessException("Geçersiz veya süresi dolmuş refresh token.");
         
-        TokenModel returnModel = new TokenModel();
+        TokenDTO returnDto = new TokenDTO();
         
-        returnModel.AccessToken = _tokenService.GenerateAccessToken(principal.Claims);
-        returnModel.RefreshToken = _tokenService.GenerateRefreshToken();
+        returnDto.AccessToken = _tokenService.GenerateAccessToken(principal.Claims);
+        returnDto.RefreshToken = _tokenService.GenerateRefreshToken();
         
-        user.RefreshToken = returnModel.RefreshToken;
-        await _userRepository.UpdateUserAsync(user);
+        user.RefreshToken = returnDto.RefreshToken;
+        await _userRepository.UpdateModelAsync(user);
 
-        return returnModel;
+        return returnDto;
     }
 
-    public async Task RevokeToken(RevokeTokenModel model)
+    public async Task RevokeToken(RevokeTokenDTO dto)
     {
         // TODO çok kötü bir yaklaşlım bunu değiştirelim
 
-        var user = await _userRepository.GetUserByTokenAsync(model.RefreshToken);
+        var user = await _userRepository.GetUserByTokenAsync(dto.RefreshToken);
 
         if (user == null)
             throw new Exception("Geçersiz token.");
 
         user.RefreshToken = null;
-        await _userRepository.UpdateUserAsync(user);
+        await _userRepository.UpdateModelAsync(user);
     }
 }

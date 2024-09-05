@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TechnoBit.Models
+namespace TechnoBit.DTOs
 {
-    public class RegisterModel
+    public class RegisterDTO
     {
         
         [Required(ErrorMessage = "Username is required")]

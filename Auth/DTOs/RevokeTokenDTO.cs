@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TechnoBit.Models;
+namespace TechnoBit.DTOs;
 
-public class RevokeTokenModel
+public class RevokeTokenDTO
 {
     [Required]
     public string RefreshToken { get; set; }

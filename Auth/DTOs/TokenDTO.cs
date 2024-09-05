@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TechnoBit.Models;
+namespace TechnoBit.DTOs;
 
-    public class TokenModel
+    public class TokenDTO
     {
         [Required]
         public string AccessToken { get; set; }

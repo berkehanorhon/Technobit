@@ -5,16 +5,10 @@ using TechnoBit.Models;
 
 namespace TechnoBit.Repositories;
 
-public class UserRepository : IUserRepository
+public class UserRepository : BaseRepository<User>, IUserRepository
 {
-    private readonly DbContext _context;
-    private readonly DbSet<User> _dbSet;
-    
-    public UserRepository(ApplicationDbContext  context)
-    {
-        _context = context;
-        _dbSet = _context.Set<User>();
-    }
+
+    public UserRepository(ApplicationDbContext context) : base(context){}
     
     public async Task<User?> GetUserByUsernameAsync(string username)
     {
@@ -31,23 +25,4 @@ public class UserRepository : IUserRepository
         return await _dbSet.FirstOrDefaultAsync(u => u.RefreshToken == token);
     }
     
-    public async Task<User> AddUserAsync(User user)
-    {
-        await _dbSet.AddAsync(user);
-        await _context.SaveChangesAsync();
-        return user;
-    }
-
-    public async Task<User> UpdateUserAsync(User user)
-    {
-        _dbSet.Update(user);
-        await _context.SaveChangesAsync();
-        return user;
-    }
-
-    public async void DeleteUserAsync(User user)
-    {
-        _dbSet.Remove(user);
-        await _context.SaveChangesAsync();
-    }
 }

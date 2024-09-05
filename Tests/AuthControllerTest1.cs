@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using TechnoBit.Controllers;
+using TechnoBit.DTOs;
 using TechnoBit.Interfaces;
 using TechnoBit.Models;
 using Xunit;
@@ -30,8 +31,8 @@ namespace TechnoBit.Tests
         public async Task Login_ReturnsOk_WhenLoginIsSuccessful()
         {
             // Arrange
-            var loginModel = new LoginModel { Username = "test", Password = "password" };
-            var token = new TokenModel { AccessToken = "accessToken", RefreshToken = "refreshToken" };
+            var loginModel = new LoginDTO { Username = "test", Password = "password" };
+            var token = new TokenDTO { AccessToken = "accessToken", RefreshToken = "refreshToken" };
             _authServiceMock.Setup(s => s.Login(loginModel)).ReturnsAsync(token);
 
             // Act
@@ -47,7 +48,7 @@ namespace TechnoBit.Tests
         public async Task Login_ReturnsUnauthorized_WhenUnauthorizedAccessExceptionIsThrown()
         {
             // Arrange
-            var loginModel = new LoginModel { Username = "test", Password = "password" };
+            var loginModel = new LoginDTO { Username = "test", Password = "password" };
             _authServiceMock.Setup(s => s.Login(loginModel)).ThrowsAsync(new UnauthorizedAccessException("Unauthorized"));
 
             // Act
@@ -63,7 +64,7 @@ namespace TechnoBit.Tests
         public async Task Register_ReturnsOk_WhenRegisterIsSuccessful()
         {
             // Arrange
-            var registerModel = new RegisterModel { Username = "newUser", Password = "password", Email = "new@example.com" };
+            var registerModel = new RegisterDTO { Username = "newUser", Password = "password", Email = "new@example.com" };
             _authServiceMock.Setup(s => s.Register(registerModel)).Returns(Task.CompletedTask);
 
             // Act
@@ -79,7 +80,7 @@ namespace TechnoBit.Tests
         public async Task Register_ReturnsBadRequest_WhenExceptionIsThrown()
         {
             // Arrange
-            var registerModel = new RegisterModel { Username = "newUser", Password = "password", Email = "new@example.com" };
+            var registerModel = new RegisterDTO { Username = "newUser", Password = "password", Email = "new@example.com" };
             _authServiceMock.Setup(s => s.Register(registerModel)).ThrowsAsync(new Exception("Error"));
 
             // Act
@@ -95,8 +96,8 @@ namespace TechnoBit.Tests
         public async Task Refresh_ReturnsOk_WhenRefreshTokenIsSuccessful()
         {
             // Arrange
-            var tokenModel = new TokenModel { RefreshToken = "oldToken" };
-            var newToken = new TokenModel { AccessToken = "accessToken", RefreshToken = "refreshToken" };
+            var tokenModel = new TokenDTO { RefreshToken = "oldToken" };
+            var newToken = new TokenDTO { AccessToken = "accessToken", RefreshToken = "refreshToken" };
             _authServiceMock.Setup(s => s.RefreshToken(tokenModel)).ReturnsAsync(newToken);
 
             // Act
@@ -112,7 +113,7 @@ namespace TechnoBit.Tests
         public async Task Refresh_ReturnsBadRequest_WhenSecurityTokenMalformedExceptionIsThrown()
         {
             // Arrange
-            var tokenModel = new TokenModel { RefreshToken = "oldToken" };
+            var tokenModel = new TokenDTO { RefreshToken = "oldToken" };
             _authServiceMock.Setup(s => s.RefreshToken(tokenModel)).ThrowsAsync(new SecurityTokenMalformedException("Invalid token"));
 
             // Act
@@ -128,7 +129,7 @@ namespace TechnoBit.Tests
         public async Task Revoke_ReturnsNoContent_WhenRevokeIsSuccessful()
         {
             // Arrange
-            var revokeModel = new RevokeTokenModel { RefreshToken = "token" };
+            var revokeModel = new RevokeTokenDTO { RefreshToken = "token" };
             _authServiceMock.Setup(s => s.RevokeToken(revokeModel)).Returns(Task.CompletedTask);
 
             // Act
@@ -143,7 +144,7 @@ namespace TechnoBit.Tests
         public async Task Revoke_ReturnsBadRequest_WhenExceptionIsThrown()
         {
             // Arrange
-            var revokeModel = new RevokeTokenModel { RefreshToken = "token" };
+            var revokeModel = new RevokeTokenDTO { RefreshToken = "token" };
             _authServiceMock.Setup(s => s.RevokeToken(revokeModel)).ThrowsAsync(new Exception("Error"));
 
             // Act

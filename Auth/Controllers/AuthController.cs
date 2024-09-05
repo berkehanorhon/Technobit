@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using TechnoBit.DTOs;
 using TechnoBit.Interfaces;
 using TechnoBit.Models;
 
@@ -19,11 +20,11 @@ namespace TechnoBit.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        public async Task<IActionResult> Login([FromBody] LoginDTO dto)
         {
             try
             {
-                return Ok(await _authService.Login(model));
+                return Ok(await _authService.Login(dto));
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -37,11 +38,11 @@ namespace TechnoBit.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterModel model)
+        public async Task<IActionResult> Register(RegisterDTO dto)
         {
             try
             {
-                await _authService.Register(model);
+                await _authService.Register(dto);
                 return Ok("Kayıt başarılı.");
             }
             catch (Exception ex)
@@ -51,11 +52,11 @@ namespace TechnoBit.Controllers
         }
 
         [HttpPost("refresh")]
-        public async Task<IActionResult> Refresh([FromBody] TokenModel model)
+        public async Task<IActionResult> Refresh([FromBody] TokenDTO dto)
         {
             try
             {
-                return Ok(await _authService.RefreshToken(model));
+                return Ok(await _authService.RefreshToken(dto));
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -76,11 +77,11 @@ namespace TechnoBit.Controllers
         }
 
         [HttpPost("revoke")]
-        public async Task<IActionResult> Revoke([FromBody] RevokeTokenModel model)
+        public async Task<IActionResult> Revoke([FromBody] RevokeTokenDTO dto)
         {
             try
             {
-                await _authService.RevokeToken(model);
+                await _authService.RevokeToken(dto);
                 return NoContent();
             }
             catch (Exception ex)

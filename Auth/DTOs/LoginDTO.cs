@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TechnoBit.Models;
+namespace TechnoBit.DTOs;
 
-public class LoginModel
+public class LoginDTO
     {
         [Required(ErrorMessage = "Username is required")]
         [StringLength(16, MinimumLength = 6, ErrorMessage = "Username must be at least {2} characters long and at max {1} characters long.")]
