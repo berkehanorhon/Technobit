@@ -1,11 +1,16 @@
-﻿namespace TechnoBit.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class User
+namespace TechnoBit.Models;
+
+public class User : BaseEntity
 {
-    public int Id { get; set; }
+    [MaxLength(50)]
     public string Username { get; set; }
+    [MaxLength(50)]
     public string PasswordHash { get; set; }
+    [MaxLength(50)]
     public string? RefreshToken { get; set; }
+    [MaxLength(50)]
     public string Email { get; set; }
     public DateTimeOffset? RefreshTokenExpiryTime { get; set; }
 }

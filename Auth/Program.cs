@@ -1,3 +1,4 @@
+using System.Reflection;
 using TechnoBit.Data; // ApplicationDbContext için gerekli
 using TechnoBit.Models; // LoginModel ve TokenModel için gerekli
 using TechnoBit.Services;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using TechnoBit.Interfaces;
 using TechnoBit.Repositories;
@@ -20,6 +22,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService ,AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+
 
 builder.Services.AddAuthentication(options =>
 {
