@@ -1,9 +1,8 @@
-﻿namespace ProductManagement.DTOs.Update;
+﻿namespace ProductManagement.DTOs.Read;
 
-public class UpdateProductDTO
+public class ProductDTO
 {
     public int Id { get; set; }
-    
     public int Categoryid { get; set; }
 
     public string Name { get; set; } = null!;

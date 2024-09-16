@@ -18,8 +18,6 @@
 
     <ItemGroup>
       <Folder Include="DTOs\Delete\" />
-      <Folder Include="DTOs\Read\" />
-      <Folder Include="Interfaces\" />
       <Folder Include="Models\" />
     </ItemGroup>
 

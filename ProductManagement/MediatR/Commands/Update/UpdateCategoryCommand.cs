@@ -1,6 +1,8 @@
-﻿namespace ProductManagement.MediatR.Commands.Update;
+﻿using MediatR;
+using ProductManagement.DTOs.Read;
+using ProductManagement.DTOs.Update;
 
-public class UpdateCategoryCommand
-{
-    
-}
+namespace ProductManagement.MediatR.Commands.Update;
+
+
+public record UpdateCategoryCommand(UpdateCategoryDTO Product) : IRequest<CategoryDTO>;

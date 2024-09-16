@@ -1,6 +1,4 @@
-﻿namespace ProductManagement.MediatR.Commands.Delete;
+﻿using MediatR;
 
-public class DeleteProductDetailTagCommand
-{
-    
-}
+namespace ProductManagement.MediatR.Commands.Delete;
+public record DeleteProductDetailTagCommand(int Id) : IRequest<Unit>;

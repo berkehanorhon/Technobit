@@ -1,7 +1,9 @@
-﻿namespace ProductManagement.DTOs.Create;
+﻿namespace ProductManagement.DTOs.Read;
 
-public class CreateProductDetailTagDTO
+public class ProductDetailTagDTO
 {
+    public int Id { get; set; }
+
     public int Productid { get; set; }
 
     public string Title { get; set; } = null!;

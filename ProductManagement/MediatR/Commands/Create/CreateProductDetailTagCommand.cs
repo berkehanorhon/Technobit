@@ -1,6 +1,6 @@
-﻿namespace ProductManagement.MediatR.Commands.Create;
+﻿using MediatR;
+using ProductManagement.DTOs.Create;
+using ProductManagement.DTOs.Read;
 
-public class CreateProductDetailTagCommand
-{
-    
-}
+namespace ProductManagement.MediatR.Commands.Create;
+public record CreateProductDetailTagCommand(CreateProductDetailTagDTO Category) : IRequest<ProductDetailTagDTO>;

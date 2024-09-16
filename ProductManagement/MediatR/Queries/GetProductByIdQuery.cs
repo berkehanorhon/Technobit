@@ -1,6 +1,6 @@
-﻿namespace ProductManagement.MediatR.Queries;
+﻿using MediatR;
+using ProductManagement.DTOs.Read;
 
-public class GetProductByIdQuery
-{
-    
-}
+namespace ProductManagement.MediatR.Queries;
+
+public record GetProductByIdQuery(int Id) : IRequest<ProductDTO>;
