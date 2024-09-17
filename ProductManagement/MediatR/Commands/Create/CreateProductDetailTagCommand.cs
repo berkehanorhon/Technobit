@@ -3,4 +3,5 @@ using ProductManagement.DTOs.Create;
 using ProductManagement.DTOs.Read;
 
 namespace ProductManagement.MediatR.Commands.Create;
-public record CreateProductDetailTagCommand(CreateProductDetailTagDTO Category) : IRequest<ProductDetailTagDTO>;
+
+public record CreateProductDetailTagCommand(CreateProductDetailTagDTO dto) : BaseCreateCommand<CreateProductDetailTagDTO>(dto);

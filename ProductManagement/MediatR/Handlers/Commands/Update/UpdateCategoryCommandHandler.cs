@@ -1,6 +1,13 @@
-﻿namespace ProductManagement.MediatR.Handlers.Commands.Update;
+﻿using ProductManagement.DTOs.Update;
+using ProductManagement.Interfaces;
+using ProductManagement.MediatR.Commands.Update;
 
-public class UpdateCategoryCommandHandler
+namespace ProductManagement.MediatR.Handlers.Commands.Update;
+
+public class UpdateCategoryCommandHandler : UpdateBaseCommandHandler<ICategoryService, UpdateCategoryCommand, UpdateCategoryDTO>
 {
-    
+    public UpdateCategoryCommandHandler(ICategoryService service) : base(service)
+    {
+    }
+
 }

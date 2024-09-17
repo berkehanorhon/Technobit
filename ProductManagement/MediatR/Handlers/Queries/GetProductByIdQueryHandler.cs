@@ -6,19 +6,9 @@ using ProductManagement.Interfaces;
 using ProductManagement.MediatR.Queries;
 
 namespace ProductManagement.MediatR.Handlers.Queries;
-
-
-public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, ProductDTO?>
+public class GetProductByIdQueryHandler : GetBaseByIdQueryHandler<GetProductByIdQuery, ProductDTO, IProductService>
 {
-    private readonly IProductService _productService;
-
-    public GetProductByIdQueryHandler(IProductService productService)
+    public GetProductByIdQueryHandler(IProductService service) : base(service)
     {
-        _productService = productService;
-    }
-
-    public async Task<ProductDTO?> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
-    {
-        return await _productService.GetByIdAsync(request.Id);
     }
 }

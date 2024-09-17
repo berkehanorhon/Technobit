@@ -7,7 +7,7 @@ public interface IService<C, R, U>
 {
     Task<IEnumerable<R>> GetAllAsync();
     Task<R?> GetByIdAsync(int id);
-    Task<R> CreateAsync(C createDTO);
+    Task<int> CreateAsync(C createDTO);
     Task<U> UpdateAsync(U updateDTO);
     Task DeleteAsync(int id);
 }

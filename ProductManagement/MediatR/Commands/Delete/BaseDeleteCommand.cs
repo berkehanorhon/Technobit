@@ -1,4 +1,5 @@
 ﻿using MediatR;
 
 namespace ProductManagement.MediatR.Commands.Delete;
-public record DeleteProductCommand(int Id) : BaseDeleteCommand(Id);
+
+public abstract record BaseDeleteCommand(int Id) : IRequest<Unit>;

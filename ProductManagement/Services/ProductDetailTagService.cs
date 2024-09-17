@@ -42,7 +42,7 @@ public class ProductDetailTagService : IProductDetailTagService
         };
     }
 
-    public async Task<ProductDetailTagDTO> CreateAsync(CreateProductDetailTagDTO createPDT)
+    public async Task<int> CreateAsync(CreateProductDetailTagDTO createPDT)
     {
         var pdt = new Productdetailtag
         {
@@ -53,13 +53,7 @@ public class ProductDetailTagService : IProductDetailTagService
 
         await _pdtRepository.AddAsync(pdt);
 
-        return new ProductDetailTagDTO
-        {
-            Id = pdt.Id,
-            Productid = pdt.Productid,
-            Title = pdt.Title,
-            Description = pdt.Description
-        };
+        return pdt.Id;
     }
 
     public async Task<UpdateProductDetailTagDTO> UpdateAsync(UpdateProductDetailTagDTO updt)

@@ -8,17 +8,10 @@ using ProductManagement.Models;
 
 namespace ProductManagement.MediatR.Handlers.Commands.Create;
 
-public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, ProductDTO>
+public class CreateProductCommandHandler : CreateBaseCommandHandler<IProductService, CreateProductCommand, CreateProductDTO>
 {
-    private readonly IProductService _productService;
-
-    public CreateProductCommandHandler(IProductService productService)
+    public CreateProductCommandHandler(IProductService service) : base(service)
     {
-        _productService = productService;
     }
 
-    public async Task<ProductDTO> Handle(CreateProductCommand request, CancellationToken cancellationToken)
-    {
-        return await _productService.CreateAsync(request.Product);
-    }
 }

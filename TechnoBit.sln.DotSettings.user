@@ -14,6 +14,12 @@
   &lt;Or&gt;&#xD;
     &lt;ProjectFile&gt;848D0039-2F47-4284-A185-4473E081D226/d:Parameterized/f:TokenServiceTests.cs&lt;/ProjectFile&gt;&#xD;
     &lt;ProjectFile&gt;848D0039-2F47-4284-A185-4473E081D226/d:Parameterized/f:AuthServiceTests.cs&lt;/ProjectFile&gt;&#xD;
+    &lt;TestAncestor&gt;&#xD;
+      &lt;TestId&gt;xUnit::848D0039-2F47-4284-A185-4473E081D226::net8.0::CategoryControllerTests&lt;/TestId&gt;&#xD;
+    &lt;/TestAncestor&gt;&#xD;
+    &lt;ProjectFile&gt;848D0039-2F47-4284-A185-4473E081D226/d:Parameterized/f:ProductDetailTagControllerTests.cs&lt;/ProjectFile&gt;&#xD;
+    &lt;ProjectFile&gt;848D0039-2F47-4284-A185-4473E081D226/d:Parameterized/f:ProductControllerTests.cs&lt;/ProjectFile&gt;&#xD;
+    &lt;ProjectFile&gt;848D0039-2F47-4284-A185-4473E081D226/d:Parameterized/f:CategoryControllerTests.cs&lt;/ProjectFile&gt;&#xD;
   &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	</wpf:ResourceDictionary>

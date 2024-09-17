@@ -4,5 +4,4 @@ using ProductManagement.DTOs.Update;
 
 namespace ProductManagement.MediatR.Commands.Update;
 
-
-public record UpdateCategoryCommand(UpdateCategoryDTO Product) : IRequest<CategoryDTO>;
+public record UpdateCategoryCommand(UpdateCategoryDTO dto) : BaseUpdateCommand<UpdateCategoryDTO>(dto);

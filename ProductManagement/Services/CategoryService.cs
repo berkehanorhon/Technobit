@@ -42,7 +42,7 @@ public class CategoryService : ICategoryService
         };
     }
 
-    public async Task<CategoryDTO> CreateAsync(CreateCategoryDTO createCategoryDto)
+    public async Task<int> CreateAsync(CreateCategoryDTO createCategoryDto)
     {
         var category = new Category
         {
@@ -53,13 +53,7 @@ public class CategoryService : ICategoryService
 
         await _categoryRepository.AddAsync(category);
 
-        return new CategoryDTO
-        {
-            Id = category.Id,
-            Name = category.Name,
-            Subcategoryid = category.Subcategoryid,
-            Description = category.Description
-        };
+        return category.Id;
     }
 
     public async Task<UpdateCategoryDTO> UpdateAsync(UpdateCategoryDTO categoryDto)

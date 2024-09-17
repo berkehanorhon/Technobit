@@ -32,7 +32,7 @@ public class ProductController : ControllerBase
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductDTO productDto)
     {
         var createdProductId = await _mediator.Send(new CreateProductCommand(productDto));
-        return CreatedAtAction(nameof(GetProduct), new { id = createdProductId });
+        return CreatedAtAction(nameof(GetProduct), new { id = createdProductId }, createdProductId);
     }
 
     [HttpPut("{id}")]

@@ -20,6 +20,7 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Auth\Auth.csproj" />
+        <ProjectReference Include="..\ProductManagement\ProductManagement.csproj" />
     </ItemGroup>
     <ItemGroup>
         <Using Include="Xunit"/>

@@ -5,20 +5,20 @@ using ProductManagement.MediatR.Queries;
 
 namespace ProductManagement.MediatR.Handlers.Queries;
 
-public class GetBaseByIdQueryHandler<Q, D, I> : IRequestHandler<Q, D?>
-    where Q : IRequest<D?>
-    where D : class
-    where I : class
+public class GetBaseByIdQueryHandler<TQuery, TDTO, TService> : IRequestHandler<TQuery, TDTO?>
+    where TQuery : BaseQuery<TDTO>
+    where TDTO : class
+    where TService : class
 {
-    private readonly I _service;
+    private readonly TService _service;
 
-    public GetBaseByIdQueryHandler(I service)
+    public GetBaseByIdQueryHandler(TService service)
     {
         _service = service;
     }
 
-    public async Task<D?> Handle(Q request, CancellationToken cancellationToken)
+    public async Task<TDTO?> Handle(TQuery request, CancellationToken cancellationToken)
     {
-        return await _service.GetByIdAsync(request.Id);
+        return await ((dynamic)_service).GetByIdAsync(request.Id);
     }
 }

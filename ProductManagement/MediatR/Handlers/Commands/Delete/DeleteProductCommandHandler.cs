@@ -6,18 +6,10 @@ using ProductManagement.MediatR.Commands.Delete;
 
 namespace ProductManagement.MediatR.Handlers.Commands.Delete;
 
-public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand, Unit>
+public class DeleteProductCommandHandler : DeleteBaseCommandHandler<IProductService, DeleteProductCommand>
 {
-    private readonly IProductService _productService;
-
-    public DeleteProductCommandHandler(IProductService productService)
+    public DeleteProductCommandHandler(IProductService service) : base(service)
     {
-        _productService = productService;
     }
 
-    public async Task<Unit> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
-    {
-        await _productService.DeleteAsync(request.Id);
-        return Unit.Value;
-    }
 }

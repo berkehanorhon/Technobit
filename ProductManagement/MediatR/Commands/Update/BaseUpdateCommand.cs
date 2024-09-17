@@ -4,4 +4,5 @@ using ProductManagement.DTOs.Update;
 
 namespace ProductManagement.MediatR.Commands.Update;
 
-public record UpdateProductDetailTagCommand(UpdateProductDetailTagDTO dto) : BaseUpdateCommand<UpdateProductDetailTagDTO>(dto);
+
+public abstract record BaseUpdateCommand<TUpdateDTO>(TUpdateDTO dto) : IRequest<TUpdateDTO>;

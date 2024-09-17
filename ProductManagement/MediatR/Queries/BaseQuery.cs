@@ -2,7 +2,4 @@
 
 namespace ProductManagement.MediatR.Queries;
 
-public abstract class BaseQuery<T> : IRequest<T>
-{
-    public int Id { get; set; }
-}
+public abstract record BaseQuery<T>(int Id) : IRequest<T>;

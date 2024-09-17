@@ -1,6 +1,12 @@
-﻿namespace ProductManagement.MediatR.Handlers.Queries;
+﻿using ProductManagement.DTOs.Read;
+using ProductManagement.Interfaces;
+using ProductManagement.MediatR.Queries;
 
-public class GetCategoryByIdQueryHandler
+namespace ProductManagement.MediatR.Handlers.Queries;
+
+public class GetCategoryByIdQueryHandler : GetBaseByIdQueryHandler<GetCategoryByIdQuery, CategoryDTO, ICategoryService>
 {
-    
+    public GetCategoryByIdQueryHandler(ICategoryService service) : base(service)
+    {
+    }
 }

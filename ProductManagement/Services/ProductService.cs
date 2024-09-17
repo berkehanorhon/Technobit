@@ -42,7 +42,7 @@ public class ProductService : IProductService
         };
     }
 
-    public async Task<ProductDTO> CreateAsync(CreateProductDTO createProductDto)
+    public async Task<int> CreateAsync(CreateProductDTO createProductDto)
     {
         var product = new Product
         {
@@ -53,13 +53,7 @@ public class ProductService : IProductService
 
         await _productRepository.AddAsync(product);
 
-        return new ProductDTO
-        {
-            Id = product.Id,
-            Categoryid = product.Categoryid,
-            Name = product.Name,
-            Description = product.Description
-        };
+        return product.Id;
     }
 
     public async Task<UpdateProductDTO> UpdateAsync(UpdateProductDTO productDto)

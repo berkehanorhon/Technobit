@@ -1,6 +1,12 @@
-﻿namespace ProductManagement.MediatR.Handlers.Commands.Delete;
+﻿using ProductManagement.Interfaces;
+using ProductManagement.MediatR.Commands.Delete;
 
-public class DeleteProductDetailTagCommandHandler
+namespace ProductManagement.MediatR.Handlers.Commands.Delete;
+
+public class DeleteProductDetailTagCommandHandler : DeleteBaseCommandHandler<IProductDetailTagService, DeleteProductDetailTagCommand>
 {
-    
+    public DeleteProductDetailTagCommandHandler(IProductDetailTagService service) : base(service)
+    {
+    }
+
 }

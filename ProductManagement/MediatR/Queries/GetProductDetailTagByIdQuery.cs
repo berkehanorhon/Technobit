@@ -3,4 +3,4 @@ using ProductManagement.DTOs.Read;
 
 namespace ProductManagement.MediatR.Queries;
 
-public record GetProductDetailTagByIdQuery(int Id) : IRequest<ProductDetailTagDTO>;
+public record GetProductDetailTagByIdQuery(int Id) : BaseQuery<ProductDetailTagDTO>(Id);

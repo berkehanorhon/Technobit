@@ -32,7 +32,7 @@ public class CategoryController : ControllerBase
     public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDTO categoryDto)
     {
         var createdCategoryId = await _mediator.Send(new CreateCategoryCommand(categoryDto));
-        return CreatedAtAction(nameof(GetCategory), new { id = createdCategoryId });
+        return CreatedAtAction(nameof(GetCategory), new { id = createdCategoryId }, createdCategoryId);
     }
 
     [HttpPut("{id}")]
