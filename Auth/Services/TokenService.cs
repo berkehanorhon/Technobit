@@ -29,7 +29,7 @@ public class TokenService : ITokenService
             audience: jwtSettings["Audience"],
             claims: claims,
             expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(jwtSettings["AccessTokenExpirationMinutes"])),
-            notBefore: DateTime.UtcNow,
+            notBefore: DateTime.UtcNow.AddMinutes(-5),
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

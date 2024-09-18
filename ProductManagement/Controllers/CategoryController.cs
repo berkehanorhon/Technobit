@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProductManagement.DTOs.Create;
 using ProductManagement.DTOs.Update;
@@ -10,6 +11,7 @@ using ProductManagement.MediatR.Queries;
 namespace ProductManagement.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class CategoryController : ControllerBase
 {
