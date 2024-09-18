@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using ProductManagement.Data;
 using ProductManagement.Interfaces;
 using ProductManagement.Models;
@@ -35,9 +36,10 @@ public class BaseRepository<T> : IRepository<T> where T : class
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(T entity)
+    public async Task<Unit> DeleteAsync(T entity)
     {
         Entities.Remove(entity);
         await _context.SaveChangesAsync();
+        return Unit.Value;
     }
 }

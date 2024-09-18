@@ -1,4 +1,5 @@
-﻿using ProductManagement.DTOs.Create;
+﻿using MediatR;
+using ProductManagement.DTOs.Create;
 using ProductManagement.DTOs.Read;
 using ProductManagement.DTOs.Update;
 using ProductManagement.Interfaces;
@@ -70,12 +71,13 @@ public class ProductService : IProductService
         return productDto;
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task<Unit> DeleteAsync(int id)
     {
         var product = await _productRepository.GetByIdAsync(id);
         if (product != null)
         {
             await _productRepository.DeleteAsync(product);
         }
+        return Unit.Value;
     }
 }

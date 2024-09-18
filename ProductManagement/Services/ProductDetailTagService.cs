@@ -1,4 +1,5 @@
-﻿using ProductManagement.DTOs.Create;
+﻿using MediatR;
+using ProductManagement.DTOs.Create;
 using ProductManagement.DTOs.Read;
 using ProductManagement.DTOs.Update;
 using ProductManagement.Interfaces;
@@ -70,12 +71,13 @@ public class ProductDetailTagService : IProductDetailTagService
         return updt;
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task<Unit> DeleteAsync(int id)
     {
         var pdt = await _pdtRepository.GetByIdAsync(id);
         if (pdt != null)
         {
             await _pdtRepository.DeleteAsync(pdt);
         }
+        return Unit.Value;
     }
 }

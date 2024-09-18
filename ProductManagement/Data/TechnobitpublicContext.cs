@@ -29,7 +29,11 @@ public partial class TechnobitpublicContext : DbContext
     public virtual DbSet<Sellerproduct> Sellerproducts { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
-    
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseNpgsql("Host=ep-nameless-boat-a2e1c4ib.eu-central-1.aws.neon.tech;Port=5432;Username=bites;Password=OZXjeuC6hlW4;Database=technobitpublic;");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Category>(entity =>
@@ -135,15 +139,16 @@ public partial class TechnobitpublicContext : DbContext
 
         modelBuilder.Entity<Sellerproduct>(entity =>
         {
-            entity.HasKey(e => new { e.Productid, e.Sellerid }).HasName("sellerproducts_pkey");
+            entity.HasKey(e => e.Id).HasName("sellerproducts_pkey");
 
             entity.ToTable("sellerproducts");
 
-            entity.Property(e => e.Productid).HasColumnName("productid");
-            entity.Property(e => e.Sellerid).HasColumnName("sellerid");
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Price)
                 .HasPrecision(10, 2)
                 .HasColumnName("price");
+            entity.Property(e => e.Productid).HasColumnName("productid");
+            entity.Property(e => e.Sellerid).HasColumnName("sellerid");
             entity.Property(e => e.Stockquantity).HasColumnName("stockquantity");
 
             entity.HasOne(d => d.Product).WithMany(p => p.Sellerproducts)

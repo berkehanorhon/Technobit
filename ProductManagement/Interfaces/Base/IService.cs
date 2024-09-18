@@ -1,4 +1,6 @@
-﻿namespace ProductManagement.Interfaces;
+﻿using MediatR;
+
+namespace ProductManagement.Interfaces;
 
 public interface IService<C, R, U> 
     where C : class
@@ -9,5 +11,5 @@ public interface IService<C, R, U>
     Task<R?> GetByIdAsync(int id);
     Task<int> CreateAsync(C createDTO);
     Task<U> UpdateAsync(U updateDTO);
-    Task DeleteAsync(int id);
+    Task<Unit> DeleteAsync(int id);
 }

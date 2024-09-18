@@ -1,4 +1,5 @@
-﻿using ProductManagement.DTOs.Create;
+﻿using MediatR;
+using ProductManagement.DTOs.Create;
 using ProductManagement.DTOs.Read;
 using ProductManagement.DTOs.Update;
 using ProductManagement.Interfaces;
@@ -70,12 +71,13 @@ public class CategoryService : ICategoryService
         return categoryDto;
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task<Unit> DeleteAsync(int id)
     {
         var category = await _categoryRepository.GetByIdAsync(id);
         if (category != null)
         {
             await _categoryRepository.DeleteAsync(category);
         }
+        return Unit.Value;
     }
 }
