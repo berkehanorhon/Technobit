@@ -3,9 +3,11 @@ using ProductManagement.Interfaces;
 using ProductManagement.MediatR.Commands.Create;
 
 namespace ProductManagement.MediatR.Handlers.Commands.Create;
-public class CreateProductDetailTagCommandHandler : CreateBaseCommandHandler<IProductService, CreateProductDetailTagCommand, CreateProductDetailTagDTO>
+
+// TODO bunun gibi başka hatalar olabilir kontrol etmem lazım
+public class CreateProductDetailTagCommandHandler : CreateBaseCommandHandler<IProductDetailTagService, CreateProductDetailTagCommand, CreateProductDetailTagDTO>
 {
-    public CreateProductDetailTagCommandHandler(IProductService service) : base(service)
+    public CreateProductDetailTagCommandHandler(IProductDetailTagService service) : base(service)
     {
     }
 
