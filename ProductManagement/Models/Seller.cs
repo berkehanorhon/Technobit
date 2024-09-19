@@ -5,7 +5,7 @@ namespace ProductManagement.Models;
 
 public partial class Seller
 {
-    public int Userid { get; set; }
+    public int Id { get; set; }
 
     public string Name { get; set; } = null!;
 
@@ -15,7 +15,7 @@ public partial class Seller
 
     public bool? Isvalidated { get; set; }
 
-    public virtual ICollection<Sellerproduct> Sellerproducts { get; set; } = new List<Sellerproduct>();
+    public virtual User IdNavigation { get; set; } = null!;
 
-    public virtual User User { get; set; } = null!;
+    public virtual ICollection<Sellerproduct> Sellerproducts { get; set; } = new List<Sellerproduct>();
 }

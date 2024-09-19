@@ -86,10 +86,14 @@ builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
 builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
 builder.Services.AddScoped<IRepository<Productdetailtag>, ProductDetailTagRepository>();
 builder.Services.AddScoped<IRepository<Sellerproduct>, SellerProductRepository>();
+builder.Services.AddScoped<IRepository<Seller>, SellerRepository>();
+
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductDetailTagService, ProductDetailTagService>();
 builder.Services.AddScoped<ISellerProductService, SellerProductService>();
+builder.Services.AddScoped<ISellerService, SellerService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -6,7 +6,7 @@ public class User : BaseEntity
 {
     [MaxLength(50)]
     public string Username { get; set; }
-    [MaxLength(50)]
+    [MaxLength(500)]
     public string PasswordHash { get; set; }
     [MaxLength(50)]
     public string? RefreshToken { get; set; }

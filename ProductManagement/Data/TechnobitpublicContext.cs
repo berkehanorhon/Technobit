@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ProductManagement.Models;
 
 namespace ProductManagement.Data;
@@ -17,6 +15,8 @@ public partial class TechnobitpublicContext : DbContext
     }
 
     public virtual DbSet<Category> Categories { get; set; }
+
+    public virtual DbSet<Dummy> Dummies { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
 
@@ -53,6 +53,18 @@ public partial class TechnobitpublicContext : DbContext
                 .HasForeignKey(d => d.Subcategoryid)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("category_subcategoryid_fkey");
+        });
+
+        modelBuilder.Entity<Dummy>(entity =>
+        {
+            entity.ToTable("Dummy");
+
+            entity.Property(e => e.Int1).HasColumnName("_int1");
+            entity.Property(e => e.Int2).HasColumnName("_int2");
+            entity.Property(e => e.Int4).HasColumnName("_int4");
+            entity.Property(e => e.Str1).HasColumnName("_str1");
+            entity.Property(e => e.Str2).HasColumnName("_str2");
+            entity.Property(e => e.Str3).HasColumnName("_str3");
         });
 
         modelBuilder.Entity<Product>(entity =>
@@ -112,13 +124,13 @@ public partial class TechnobitpublicContext : DbContext
 
         modelBuilder.Entity<Seller>(entity =>
         {
-            entity.HasKey(e => e.Userid).HasName("seller_pkey");
+            entity.HasKey(e => e.Id).HasName("seller_pkey");
 
             entity.ToTable("seller");
 
-            entity.Property(e => e.Userid)
+            entity.Property(e => e.Id)
                 .ValueGeneratedNever()
-                .HasColumnName("userid");
+                .HasColumnName("id");
             entity.Property(e => e.Avatarpath)
                 .HasMaxLength(255)
                 .HasColumnName("avatarpath");
@@ -132,9 +144,9 @@ public partial class TechnobitpublicContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("wallpaperpath");
 
-            entity.HasOne(d => d.User).WithOne(p => p.Seller)
-                .HasForeignKey<Seller>(d => d.Userid)
-                .HasConstraintName("seller_userid_fkey");
+            entity.HasOne(d => d.IdNavigation).WithOne(p => p.Seller)
+                .HasForeignKey<Seller>(d => d.Id)
+                .HasConstraintName("seller_id_fkey");
         });
 
         modelBuilder.Entity<Sellerproduct>(entity =>
@@ -158,6 +170,14 @@ public partial class TechnobitpublicContext : DbContext
             entity.HasOne(d => d.Seller).WithMany(p => p.Sellerproducts)
                 .HasForeignKey(d => d.Sellerid)
                 .HasConstraintName("sellerproducts_sellerid_fkey");
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.Property(e => e.Email).HasMaxLength(50);
+            entity.Property(e => e.PasswordHash).HasMaxLength(50);
+            entity.Property(e => e.RefreshToken).HasMaxLength(50);
+            entity.Property(e => e.Username).HasMaxLength(50);
         });
 
         OnModelCreatingPartial(modelBuilder);
