@@ -1,11 +1,8 @@
-﻿namespace ProductManagement.DTOs.Create;
+﻿using ProductManagement.DTOs.Base;
 
-public class CreateSellerDTO
+namespace ProductManagement.DTOs.Create;
+
+public class CreateSellerDTO : BaseSellerDTO
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = null!;
 
-    public string? Avatarpath { get; set; }
-
-    public string? Wallpaperpath { get; set; }
 }

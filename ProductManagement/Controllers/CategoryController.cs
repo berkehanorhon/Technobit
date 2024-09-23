@@ -11,15 +11,16 @@ using ProductManagement.MediatR.Queries;
 namespace ProductManagement.Controllers;
 
 [ApiController]
-[Authorize]
 [Route("api/[controller]")]
 public class CategoryController : ControllerBase
 {
     private readonly IMediator _mediator;
-
-    public CategoryController(IMediator mediator)
+    private readonly ILogger<CategoryController> _logger;
+    
+    public CategoryController(IMediator mediator, ILogger<CategoryController> logger)
     {
         _mediator = mediator;
+        _logger = logger;
     }
 
     [HttpGet("{id}")]
@@ -31,6 +32,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDTO categoryDto)
     {
         var createdCategoryId = await _mediator.Send(new CreateCategoryCommand(categoryDto));
@@ -38,6 +40,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize]
     public async Task<IActionResult> UpdateCategory(int id, [FromBody] UpdateCategoryDTO categoryDto)
     {
         if (id != categoryDto.Id) return BadRequest();
@@ -48,6 +51,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> DeleteCategory(int id)
     {
         await _mediator.Send(new DeleteCategoryCommand(id));

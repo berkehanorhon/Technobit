@@ -1,11 +1,8 @@
-﻿namespace ProductManagement.DTOs.Read;
+﻿using ProductManagement.DTOs.Base;
 
-public class ProductDTO
+namespace ProductManagement.DTOs.Read;
+
+public class ProductDTO : BaseProductDTO
 {
     public int Id { get; set; }
-    public int Categoryid { get; set; }
-
-    public string Name { get; set; } = null!;
-
-    public string? Description { get; set; }
 }

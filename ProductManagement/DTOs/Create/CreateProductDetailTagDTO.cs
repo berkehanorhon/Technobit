@@ -1,10 +1,7 @@
-﻿namespace ProductManagement.DTOs.Create;
+﻿using ProductManagement.DTOs.Base;
 
-public class CreateProductDetailTagDTO
+namespace ProductManagement.DTOs.Create;
+
+public class CreateProductDetailTagDTO : BaseProductDetailTagDTO
 {
-    public int Productid { get; set; }
-
-    public string Title { get; set; } = null!;
-
-    public string Description { get; set; } = null!;
 }

@@ -14,11 +14,24 @@ using ProductManagement.MediatR.Handlers.Commands.Create;
 using ProductManagement.MediatR.Handlers.Commands.Update;
 using ProductManagement.MediatR.Handlers.Queries;
 using ProductManagement.MediatR.Queries;
+using ProductManagement.Middlewares;
 using ProductManagement.Models;
 using ProductManagement.Repositories;
 using ProductManagement.Services;
+using ProductManagement.Validators;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console() // Konsola yaz
+    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+    .WriteTo.PostgreSQL(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        "Logs",
+        needAutoCreateTable: true
+    )
+    .CreateLogger();
 
 builder.Services.AddAuthentication(options =>
     {
@@ -75,11 +88,11 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
-builder.Services.AddControllers()
-    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ProductValidator>());
-builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Program>());
-builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ProductValidator>());
 
+builder.Services.AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters();
+
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
 
 builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
@@ -94,6 +107,8 @@ builder.Services.AddScoped<IProductDetailTagService, ProductDetailTagService>();
 builder.Services.AddScoped<ISellerProductService, SellerProductService>();
 builder.Services.AddScoped<ISellerService, SellerService>();
 
+builder.Host.UseSerilog();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -102,6 +117,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<CustomExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 

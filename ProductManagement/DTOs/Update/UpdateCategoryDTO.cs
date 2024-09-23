@@ -1,13 +1,8 @@
-﻿namespace ProductManagement.DTOs.Update;
+﻿using ProductManagement.DTOs.Base;
 
-public class UpdateCategoryDTO
+namespace ProductManagement.DTOs.Update;
+
+public class UpdateCategoryDTO : BaseCategoryDTO
 {
     public int Id { get; set; }
-
-    public string Name { get; set; } = null!;
-
-    public int? Subcategoryid { get; set; }
-
-    public string? Description { get; set; }
-
 }

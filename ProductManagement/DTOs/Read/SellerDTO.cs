@@ -1,14 +1,8 @@
-﻿namespace ProductManagement.DTOs.Read;
+﻿using ProductManagement.DTOs.Base;
 
-public class SellerDTO
+namespace ProductManagement.DTOs.Read;
+
+public class SellerDTO : BaseSellerDTO
 {
-    public int Id { get; set; }
-
-    public string Name { get; set; } = null!;
-
-    public string? Avatarpath { get; set; }
-
-    public string? Wallpaperpath { get; set; }
-
     public bool? Isvalidated { get; set; }
 }

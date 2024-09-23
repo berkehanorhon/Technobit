@@ -1,10 +1,8 @@
-﻿namespace ProductManagement.DTOs.Create;
+﻿using ProductManagement.DTOs.Base;
 
-public class CreateCategoryDTO
+namespace ProductManagement.DTOs.Create;
+
+public class CreateCategoryDTO : BaseCategoryDTO
 {
-    public string Name { get; set; } = null!;
 
-    public int? Subcategoryid { get; set; }
-
-    public string? Description { get; set; }
 }

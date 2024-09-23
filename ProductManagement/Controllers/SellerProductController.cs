@@ -11,15 +11,15 @@ using ProductManagement.MediatR.Queries;
 namespace ProductManagement.Controllers;
 
 [ApiController]
-[Authorize]
 [Route("api/[controller]")]
 public class SellerProductController : ControllerBase
 {
     private readonly IMediator _mediator;
-
-    public SellerProductController(IMediator mediator)
+    private readonly ILogger<SellerProductController> _logger;
+    public SellerProductController(IMediator mediator, ILogger<SellerProductController> logger)
     {
         _mediator = mediator;
+        _logger = logger;
     }
 
     [HttpGet("{id}")]
@@ -31,6 +31,7 @@ public class SellerProductController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> CreateSellertProduct([FromBody] CreateSellerProductDTO sellertProductDto)
     {
         var createdSellertProductId = await _mediator.Send(new CreateSellerProductCommand(sellertProductDto));
@@ -38,6 +39,7 @@ public class SellerProductController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize]
     public async Task<IActionResult> UpdateSellertProduct(int id, [FromBody] UpdateSellerProductDTO sellertProductDto)
     {
         if (id != sellertProductDto.Id) return BadRequest();
@@ -48,6 +50,7 @@ public class SellerProductController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> DeleteSellertProduct(int id)
     {
         await _mediator.Send(new DeleteSellerProductCommand(id));
