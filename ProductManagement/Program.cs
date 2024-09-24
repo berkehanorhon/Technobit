@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ProductManagement.Data;
+using ProductManagement.Extensions;
 using ProductManagement.Interfaces;
 using ProductManagement.MediatR.Commands.Delete;
 using ProductManagement.MediatR.Handlers.Commands.Create;
@@ -94,6 +95,8 @@ builder.Services.AddFluentValidationAutoValidation()
 
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
+builder.Services.AddTransient<IExcelReader, ExcelReader>();
+builder.Services.AddTransient<IExcelToSellerProduct, ExcelToSellerProduct>();
 
 builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
 builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();

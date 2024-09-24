@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProductManagement.DTOs.Create;
 using ProductManagement.DTOs.Update;
 using ProductManagement.MediatR.Commands.Create;
+using ProductManagement.MediatR.Commands.Create.FromFile;
 using ProductManagement.MediatR.Commands.Delete;
 using ProductManagement.MediatR.Commands.Update;
 using ProductManagement.MediatR.Queries;
@@ -37,7 +38,27 @@ public class SellerProductController : ControllerBase
         var createdSellertProductId = await _mediator.Send(new CreateSellerProductCommand(sellertProductDto));
         return CreatedAtAction(nameof(GetSellerProduct), new { id = createdSellertProductId }, createdSellertProductId);
     }
+    
+    [Authorize]
+    [HttpPost("import")]
+    public async Task<IActionResult> ImportProducts([FromForm] IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+        {
+            return BadRequest("No file uploaded or file is empty.");
+        }
 
+        var command = new ImportProductsCommand(file);
+        var result = await _mediator.Send(command);
+
+        if (result)
+        {
+            return Ok("Products imported successfully.");
+        }
+
+        return BadRequest("Failed to import one or more products.");
+    }
+    
     [HttpPut("{id}")]
     [Authorize]
     public async Task<IActionResult> UpdateSellerProduct(int id, [FromBody] UpdateSellerProductDTO sellertProductDto)

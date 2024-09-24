@@ -6,4 +6,7 @@ using ProductManagement.Models;
 namespace ProductManagement.Interfaces;
 
 
-public interface ISellerProductService : IService<CreateSellerProductDTO, SellerProductDTO, UpdateSellerProductDTO>;
+public interface ISellerProductService : IService<CreateSellerProductDTO, SellerProductDTO, UpdateSellerProductDTO>
+{
+    Task UpdateRangeAsync(List<Sellerproduct> entities);
+}

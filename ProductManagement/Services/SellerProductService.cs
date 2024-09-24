@@ -74,7 +74,12 @@ public class SellerProductService : ISellerProductService
 
         return sellerProductDto;
     }
-
+    
+    public async Task UpdateRangeAsync(List<Sellerproduct> entities)
+    {
+        await _sellerProductRepository.UpdateRangeAsync(entities);
+    }
+    
     public async Task<Unit> DeleteAsync(int id)
     {
         var sellerProduct = await _sellerProductRepository.GetByIdAsync(id);

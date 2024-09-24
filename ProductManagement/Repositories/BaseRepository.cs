@@ -36,6 +36,12 @@ public class BaseRepository<T> : IRepository<T> where T : class
         await _context.SaveChangesAsync();
     }
 
+    public async Task UpdateRangeAsync(List<T> entities)
+    {
+        Entities.UpdateRange(entities);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<Unit> DeleteAsync(T entity)
     {
         Entities.Remove(entity);
