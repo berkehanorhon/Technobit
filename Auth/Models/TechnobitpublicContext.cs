@@ -1,16 +1,16 @@
-﻿using TechnoBit.Models;
-
-namespace TechnoBit.Data;
-
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-public partial class ApplicationDbContext : DbContext
+namespace TechnoBit.Models;
+
+public partial class TechnobitpublicContext : DbContext
 {
-    public ApplicationDbContext()
+    public TechnobitpublicContext()
     {
     }
 
-    public ApplicationDbContext(DbContextOptions<TechnobitpublicContext> options)
+    public TechnobitpublicContext(DbContextOptions<TechnobitpublicContext> options)
         : base(options)
     {
     }

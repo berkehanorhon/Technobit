@@ -1,16 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TechnoBit.Models;
 
-public class User : BaseEntity
+public partial class User
 {
-    [MaxLength(50)]
-    public string Username { get; set; }
-    [MaxLength(500)]
-    public string PasswordHash { get; set; }
-    [MaxLength(50)]
+    public int Id { get; set; }
+
+    public string Username { get; set; } = null!;
+
+    public string PasswordHash { get; set; } = null!;
+
     public string? RefreshToken { get; set; }
-    [MaxLength(50)]
-    public string Email { get; set; }
-    public DateTimeOffset? RefreshTokenExpiryTime { get; set; }
+
+    public string Email { get; set; } = null!;
+
+    public DateTime? RefreshTokenExpiryTime { get; set; }
+
+    public bool IsAdmin { get; set; }
+
+    public virtual Seller? Seller { get; set; }
 }

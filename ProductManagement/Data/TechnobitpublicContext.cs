@@ -17,7 +17,7 @@ public partial class TechnobitpublicContext : DbContext
     public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Dummy> Dummies { get; set; }
-
+    
     public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<Productdetailtag> Productdetailtags { get; set; }
@@ -66,7 +66,7 @@ public partial class TechnobitpublicContext : DbContext
             entity.Property(e => e.Str2).HasColumnName("_str2");
             entity.Property(e => e.Str3).HasColumnName("_str3");
         });
-
+        
         modelBuilder.Entity<Product>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("product_pkey");
@@ -175,7 +175,10 @@ public partial class TechnobitpublicContext : DbContext
         modelBuilder.Entity<User>(entity =>
         {
             entity.Property(e => e.Email).HasMaxLength(50);
-            entity.Property(e => e.PasswordHash).HasMaxLength(50);
+            entity.Property(e => e.IsAdmin)
+                .HasDefaultValue(false)
+                .HasColumnName("isAdmin");
+            entity.Property(e => e.PasswordHash).HasMaxLength(500);
             entity.Property(e => e.RefreshToken).HasMaxLength(50);
             entity.Property(e => e.Username).HasMaxLength(50);
         });

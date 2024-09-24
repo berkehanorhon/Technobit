@@ -104,6 +104,7 @@ builder.Services.AddScoped<IRepository<Productdetailtag>, ProductDetailTagReposi
 builder.Services.AddScoped<IRepository<Sellerproduct>, SellerProductRepository>();
 builder.Services.AddScoped<IRepository<Seller>, SellerRepository>();
 
+builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductDetailTagService, ProductDetailTagService>();
@@ -122,6 +123,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<CustomExceptionMiddleware>();
+app.UseMiddleware<JwtMiddleware>(); 
 
 app.UseHttpsRedirection();
 

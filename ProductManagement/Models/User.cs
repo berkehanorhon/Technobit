@@ -17,5 +17,7 @@ public partial class User
 
     public DateTime? RefreshTokenExpiryTime { get; set; }
 
+    public bool IsAdmin { get; set; } = false;
+
     public virtual Seller? Seller { get; set; }
 }

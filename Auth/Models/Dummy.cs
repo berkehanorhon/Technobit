@@ -1,12 +1,21 @@
-﻿namespace TechnoBit.Models;
+﻿using System;
+using System.Collections.Generic;
 
-public class Dummy : BaseEntity
+namespace TechnoBit.Models;
+
+public partial class Dummy
 {
-    public int? _int1 { get; set; }
-    public string? _str1 { get; set; }
-    public IEnumerable<int>? _int2 { get; set; }
-    public string? _str2 { get; set; }
-    public IEnumerable<string>? _str3 { get; set; }
-    public List<int>? _int4 { get; set; }
-    
+    public int Id { get; set; }
+
+    public int? Int1 { get; set; }
+
+    public string? Str1 { get; set; }
+
+    public List<int>? Int2 { get; set; }
+
+    public string? Str2 { get; set; }
+
+    public List<string>? Str3 { get; set; }
+
+    public List<int>? Int4 { get; set; }
 }
