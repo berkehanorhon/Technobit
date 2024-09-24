@@ -23,7 +23,7 @@ public class SellerProductController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetSellertProduct(int id)
+    public async Task<IActionResult> GetSellerProduct(int id)
     {
         var sellertProduct = await _mediator.Send(new GetSellerProductByIdQuery(id));
         if (sellertProduct == null) return NotFound();
@@ -32,15 +32,15 @@ public class SellerProductController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    public async Task<IActionResult> CreateSellertProduct([FromBody] CreateSellerProductDTO sellertProductDto)
+    public async Task<IActionResult> CreateSellerProduct([FromBody] CreateSellerProductDTO sellertProductDto)
     {
         var createdSellertProductId = await _mediator.Send(new CreateSellerProductCommand(sellertProductDto));
-        return CreatedAtAction(nameof(GetSellertProduct), new { id = createdSellertProductId }, createdSellertProductId);
+        return CreatedAtAction(nameof(GetSellerProduct), new { id = createdSellertProductId }, createdSellertProductId);
     }
 
     [HttpPut("{id}")]
     [Authorize]
-    public async Task<IActionResult> UpdateSellertProduct(int id, [FromBody] UpdateSellerProductDTO sellertProductDto)
+    public async Task<IActionResult> UpdateSellerProduct(int id, [FromBody] UpdateSellerProductDTO sellertProductDto)
     {
         if (id != sellertProductDto.Id) return BadRequest();
 
@@ -51,7 +51,7 @@ public class SellerProductController : ControllerBase
 
     [HttpDelete("{id}")]
     [Authorize]
-    public async Task<IActionResult> DeleteSellertProduct(int id)
+    public async Task<IActionResult> DeleteSellerProduct(int id)
     {
         await _mediator.Send(new DeleteSellerProductCommand(id));
         return NoContent();
