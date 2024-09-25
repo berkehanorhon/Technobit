@@ -22,12 +22,13 @@ using ProductManagement.Repositories;
 using ProductManagement.Services;
 using ProductManagement.Validators;
 using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
 Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console() // Konsola yaz
-    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+    .WriteTo.Console(restrictedToMinimumLevel:LogEventLevel.Warning) // Konsola yaz
+    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day, restrictedToMinimumLevel:LogEventLevel.Warning)
     .WriteTo.PostgreSQL(
         builder.Configuration.GetConnectionString("DefaultConnection"),
         "Logs",
