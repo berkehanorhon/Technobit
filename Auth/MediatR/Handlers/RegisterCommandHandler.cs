@@ -30,7 +30,8 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand>
             PasswordHash = passwordHash,
             Email = request.Email
         });
-
+        
+        
         return Unit.Value;
     }
 }

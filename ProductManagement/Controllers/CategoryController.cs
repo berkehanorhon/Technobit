@@ -32,7 +32,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryDTO categoryDto)
     {
         var createdCategoryId = await _mediator.Send(new CreateCategoryCommand(categoryDto));
@@ -40,7 +40,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> UpdateCategory(int id, [FromBody] UpdateCategoryDTO categoryDto)
     {
         if (id != categoryDto.Id) return BadRequest();
@@ -51,7 +51,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> DeleteCategory(int id)
     {
         await _mediator.Send(new DeleteCategoryCommand(id));

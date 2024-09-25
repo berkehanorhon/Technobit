@@ -31,7 +31,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductDTO productDto)
     {
         var createdProductId = await _mediator.Send(new CreateProductCommand(productDto));
@@ -39,7 +39,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductDTO productDto)
     {
         if (id != productDto.Id) return BadRequest();
@@ -50,7 +50,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> DeleteProduct(int id)
     {
         await _mediator.Send(new DeleteProductCommand(id));

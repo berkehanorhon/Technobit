@@ -32,14 +32,14 @@ public class SellerProductController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
+    [Authorize(Policy = "SellerOnly")]
     public async Task<IActionResult> CreateSellerProduct([FromBody] CreateSellerProductDTO sellertProductDto)
     {
         var createdSellertProductId = await _mediator.Send(new CreateSellerProductCommand(sellertProductDto));
         return CreatedAtAction(nameof(GetSellerProduct), new { id = createdSellertProductId }, createdSellertProductId);
     }
     
-    [Authorize]
+    [Authorize(Policy = "SellerOnly")]
     [HttpPost("import")]
     public async Task<IActionResult> ImportProducts([FromForm] IFormFile file)
     {
@@ -60,7 +60,7 @@ public class SellerProductController : ControllerBase
     }
     
     [HttpPut("{id}")]
-    [Authorize]
+    [Authorize(Policy = "SellerOnly")]
     public async Task<IActionResult> UpdateSellerProduct(int id, [FromBody] UpdateSellerProductDTO sellertProductDto)
     {
         if (id != sellertProductDto.Id) return BadRequest();
@@ -71,7 +71,7 @@ public class SellerProductController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize]
+    [Authorize(Policy = "SellerOnly")]
     public async Task<IActionResult> DeleteSellerProduct(int id)
     {
         await _mediator.Send(new DeleteSellerProductCommand(id));

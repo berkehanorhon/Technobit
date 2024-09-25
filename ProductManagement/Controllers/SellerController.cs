@@ -31,7 +31,7 @@ public class SellerController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> CreateSeller([FromBody] CreateSellerDTO sellerDto)
     {
         var createdSellerId = await _mediator.Send(new CreateSellerCommand(sellerDto));
@@ -39,7 +39,7 @@ public class SellerController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> UpdateSeller(int id, [FromBody] UpdateSellerDTO sellerDto)
     {
         if (id != sellerDto.Id) return BadRequest();
@@ -50,7 +50,7 @@ public class SellerController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> DeleteSeller(int id)
     {
         await _mediator.Send(new DeleteSellerCommand(id));

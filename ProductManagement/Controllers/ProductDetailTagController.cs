@@ -31,7 +31,7 @@ public class ProductDetailTagController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> CreateProductDetailTag([FromBody] CreateProductDetailTagDTO productDetailTagDto)
     {
         var createdProductDetailTagId = await _mediator.Send(new CreateProductDetailTagCommand(productDetailTagDto));
@@ -39,7 +39,7 @@ public class ProductDetailTagController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> UpdateProductDetailTag(int id, [FromBody] UpdateProductDetailTagDTO productDetailTagDto)
     {
         if (id != productDetailTagDto.Id) return BadRequest();
@@ -50,7 +50,7 @@ public class ProductDetailTagController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize]
+    [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> DeleteProductDetailTag(int id)
     {
         await _mediator.Send(new DeleteProductDetailTagCommand(id));

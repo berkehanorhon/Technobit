@@ -12,11 +12,13 @@ namespace TechnoBit.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IConfiguration _configuration;
-
-        public AuthController(IAuthService authService, IConfiguration configuration)
+        private readonly IEmailService _emailService;
+        
+        public AuthController(IAuthService authService, IConfiguration configuration, IEmailService emailService)
         {
             _authService = authService;
             _configuration = configuration;
+            _emailService = emailService;
         }
 
         [HttpPost("login")]
@@ -43,6 +45,7 @@ namespace TechnoBit.Controllers
             try
             {
                 await _authService.Register(dto);
+                await _emailService.SendWelcomeEmail(dto.Email, dto.Username);
                 return Ok("Kayıt başarılı.");
             }
             catch (Exception ex)
