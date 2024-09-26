@@ -115,6 +115,7 @@ builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
 builder.Services.AddScoped<IRepository<Productdetailtag>, ProductDetailTagRepository>();
 builder.Services.AddScoped<IRepository<Sellerproduct>, SellerProductRepository>();
 builder.Services.AddScoped<IRepository<Seller>, SellerRepository>();
+builder.Services.AddScoped<IRepository<Productimage>, ProductImageRepository>();
 
 builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
 builder.Services.AddScoped<IProductService, ProductService>();
@@ -122,6 +123,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductDetailTagService, ProductDetailTagService>();
 builder.Services.AddScoped<ISellerProductService, SellerProductService>();
 builder.Services.AddScoped<ISellerService, SellerService>();
+builder.Services.AddScoped<IProductImageService, ProductImageService>();
 
 builder.Host.UseSerilog();
 
