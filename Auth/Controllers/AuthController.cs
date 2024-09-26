@@ -6,7 +6,7 @@ using TechnoBit.Models;
 
 namespace TechnoBit.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {

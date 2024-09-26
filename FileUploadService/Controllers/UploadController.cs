@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FileUploadService.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/upload")]
     [Authorize(Policy = "SellerOnly")]
     public class UploadController : ControllerBase
     {

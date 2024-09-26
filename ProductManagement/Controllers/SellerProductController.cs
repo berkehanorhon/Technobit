@@ -12,7 +12,7 @@ using ProductManagement.MediatR.Queries;
 namespace ProductManagement.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/requests/[controller]")]
 public class SellerProductController : ControllerBase
 {
     private readonly IMediator _mediator;
