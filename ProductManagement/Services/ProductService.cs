@@ -3,6 +3,7 @@ using ProductManagement.DTOs.Create;
 using ProductManagement.DTOs.Read;
 using ProductManagement.DTOs.Update;
 using ProductManagement.Interfaces;
+using ProductManagement.Interfaces.Repositories;
 using ProductManagement.Models;
 
 namespace ProductManagement.Services;
@@ -10,9 +11,9 @@ namespace ProductManagement.Services;
 
 public class ProductService : IProductService
 {
-    private readonly IRepository<Product> _productRepository;
+    private readonly IProductRepository _productRepository;
 
-    public ProductService(IRepository<Product> productRepository)
+    public ProductService(IProductRepository productRepository)
     {
         _productRepository = productRepository;
     }
@@ -79,5 +80,10 @@ public class ProductService : IProductService
             await _productRepository.DeleteAsync(product);
         }
         return Unit.Value;
+    }
+
+    public async Task<(List<ProductSendListDTO> Items, int TotalPages)> GetLatestsWithPaging(ProductListingDTO dto)
+    {
+        return await _productRepository.GetLatestsWithPaging(dto);
     }
 }

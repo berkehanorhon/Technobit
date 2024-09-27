@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProductManagement.DTOs.Create;
+using ProductManagement.DTOs.Read;
 using ProductManagement.DTOs.Update;
 using ProductManagement.MediatR.Commands.Create;
 using ProductManagement.MediatR.Commands.Delete;
@@ -30,6 +31,31 @@ public class ProductController : ControllerBase
         return Ok(product);
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetProduct([FromQuery] ProductListingDTO dto)
+    { 
+        if (dto.count <= 0 || dto.pageNumber <= 0)
+        {
+            return BadRequest("Count and Page number must be greater than 0.");
+        }
+
+        var (items, totalPages) = await _mediator.Send(new GetProductListQuery(dto));
+
+        if (!items.Any())
+        {
+            return NotFound("No products found for the given page.");
+        }
+
+        var response = new
+        {
+            Items = items,
+            CurrentPage = dto.pageNumber,
+            TotalPages = totalPages,
+        };
+
+        return Ok(response);
+    }
+    
     [HttpPost]
     [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductDTO productDto)

@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using ProductManagement.Data;
 using ProductManagement.Extensions;
 using ProductManagement.Interfaces;
+using ProductManagement.Interfaces.Repositories;
 using ProductManagement.MediatR.Commands.Delete;
 using ProductManagement.MediatR.Handlers.Commands.Create;
 using ProductManagement.MediatR.Handlers.Commands.Update;
@@ -111,6 +112,7 @@ builder.Services.AddTransient<IExcelReader, ExcelReader>();
 builder.Services.AddTransient<IExcelToSellerProduct, ExcelToSellerProduct>();
 
 builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
 builder.Services.AddScoped<IRepository<Productdetailtag>, ProductDetailTagRepository>();
 builder.Services.AddScoped<IRepository<Sellerproduct>, SellerProductRepository>();
