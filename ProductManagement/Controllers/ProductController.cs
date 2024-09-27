@@ -56,6 +56,17 @@ public class ProductController : ControllerBase
         return Ok(response);
     }
     
+    [HttpGet("details")]
+    public async Task<IActionResult> GetProductDetails(int id)
+    {
+        var productPageSendDTO = await _mediator.Send(new GetProductDetailsByIdQuery(id));
+        if (productPageSendDTO == null)
+        {
+            return NotFound();
+        }
+        return Ok(productPageSendDTO);
+    }
+    
     [HttpPost]
     [Authorize(Policy = "AdminOnly")]
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductDTO productDto)

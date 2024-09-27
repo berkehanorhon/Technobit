@@ -44,6 +44,11 @@ public class ProductService : IProductService
         };
     }
 
+    public async Task<ProductPageSendDTO?> GetDetailsById(int productId)
+    {
+        return await _productRepository.GetProductPageSendDTOAsync(productId);
+    }
+    
     public async Task<int> CreateAsync(CreateProductDTO createProductDto)
     {
         var product = new Product
